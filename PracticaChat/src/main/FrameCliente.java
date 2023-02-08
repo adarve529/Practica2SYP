@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,6 +14,7 @@ import java.awt.Color;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class FrameCliente {
 
@@ -57,6 +59,7 @@ public class FrameCliente {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.getContentPane().setBackground(new Color(70, 130, 180));
 		frame.setBounds(100, 100, 456, 552);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -71,14 +74,23 @@ public class FrameCliente {
 	private JLabel getLblImagenUsuario() {
 		if (lblImagenUsuario == null) {
 			lblImagenUsuario = new JLabel("");
-			lblImagenUsuario.setIcon(new ImageIcon("C:\\Users\\miloi\\Documents\\Entregas\\Desarrollo de interfaces\\61d183263a856e0004c6334a.png"));
-			lblImagenUsuario.setBounds(144, 11, 113, 109);
+			lblImagenUsuario.setBounds(163, 11, 113, 109);
+			
+			Image img= new ImageIcon("img\\amongus_rojo.png").getImage();
+			ImageIcon img2=new ImageIcon(img.getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+
+			lblImagenUsuario.setIcon(img2);
+			
+//			lblImagenUsuario.setIcon(new ImageIcon());
+			
 		}
 		return lblImagenUsuario;
 	}
 	private JTextArea getTxtConversacion() {
 		if (txtConversacion == null) {
 			txtConversacion = new JTextArea();
+			txtConversacion.setFont(new Font("Courier New", Font.PLAIN, 14));
+			txtConversacion.setText("Introduce usuario y password...");
 			txtConversacion.setEditable(false);
 			txtConversacion.setBounds(10, 131, 423, 259);
 		}
