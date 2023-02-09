@@ -19,7 +19,7 @@ public class ChatServer {
         clientSockets = new ArrayList<>();
         userNames = new ArrayList<>();
         try {
-            ServerSocket serverSocket = new ServerSocket(5000);
+            ServerSocket serverSocket = new ServerSocket(9800);
             System.out.println("Servidor iniciado");
 
             while (true) {

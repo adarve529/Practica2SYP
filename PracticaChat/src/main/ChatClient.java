@@ -12,7 +12,7 @@ public class ChatClient {
     	
     	FrameCliente frameClient = new FrameCliente();
         try {
-            Socket socket = new Socket("localhost", 5000);
+            Socket socket = new Socket("localhost", 9800);
             DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
