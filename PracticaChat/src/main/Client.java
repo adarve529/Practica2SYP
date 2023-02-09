@@ -8,7 +8,12 @@ import java.util.Scanner;
 
 public class Client {
   public static void main(String[] args) {
-    try {
+   
+	  //abrimos el frame cliente
+	  FrameCliente frameCliente = new FrameCliente();
+	  frameCliente.initialize();
+	  
+	  try {
       Socket socket = new Socket("192.168.165.244", 3434);
       System.out.println("Conectado al servidor");
 

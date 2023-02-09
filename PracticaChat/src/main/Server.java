@@ -9,7 +9,11 @@ import java.util.Scanner;
 
 public class Server {
 	  public static void main(String[] args) {
-	    try {
+	    
+		  FrameServidor window = new FrameServidor();
+		  window.initialize();
+		  
+		  try {
 	      ServerSocket serverSocket = new ServerSocket(3434);
 	      System.out.println("Servidor iniciado, esperando conexiones");
 

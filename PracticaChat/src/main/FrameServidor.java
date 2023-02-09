@@ -27,16 +27,16 @@ public class FrameServidor {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameServidor window = new FrameServidor();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					FrameServidor window = new FrameServidor();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 
 	/**
@@ -49,13 +49,14 @@ public class FrameServidor {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	public void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 456, 552);
 		frame.getContentPane().setBackground(new Color(70, 130, 180));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
+		frame.setVisible(true);
 		frame.getContentPane().add(getLblImagenUsuario());
 		frame.getContentPane().add(getTxtConversacion());
 		frame.getContentPane().add(getTxtFieldMensajes());

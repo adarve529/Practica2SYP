@@ -38,7 +38,7 @@ public class FrameCliente {
 //		EventQueue.invokeLater(new Runnable() {
 //			public void run() {
 //				try {
-//					FrameCliente window = new FrameCliente();
+//				FrameCliente window = new FrameCliente();
 //					window.frame.setVisible(true);
 //				} catch (Exception e) {
 //					e.printStackTrace();
@@ -57,13 +57,14 @@ public class FrameCliente {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	public void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(70, 130, 180));
 		frame.setBounds(100, 100, 456, 552);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
+		frame.setVisible(true);
 		frame.getContentPane().add(getPanelLogin());
 		frame.getContentPane().add(getLblImagenUsuario());
 		frame.getContentPane().add(getTxtConversacion());
@@ -71,7 +72,7 @@ public class FrameCliente {
 		frame.getContentPane().add(getBtnEnviar());
 		frame.getContentPane().add(getBtnSalir());
 	}
-	private JLabel getLblImagenUsuario() {
+	public JLabel getLblImagenUsuario() {
 		if (lblImagenUsuario == null) {
 			lblImagenUsuario = new JLabel("");
 			lblImagenUsuario.setBounds(163, 11, 113, 109);
@@ -86,7 +87,7 @@ public class FrameCliente {
 		}
 		return lblImagenUsuario;
 	}
-	private JTextArea getTxtConversacion() {
+	public JTextArea getTxtConversacion() {
 		if (txtConversacion == null) {
 			txtConversacion = new JTextArea();
 			txtConversacion.setFont(new Font("Courier New", Font.PLAIN, 14));
@@ -96,7 +97,7 @@ public class FrameCliente {
 		}
 		return txtConversacion;
 	}
-	private JTextField getTxtFieldMensajes() {
+	public JTextField getTxtFieldMensajes() {
 		if (txtFieldMensajes == null) {
 			txtFieldMensajes = new JTextField();
 			txtFieldMensajes.setBounds(10, 401, 424, 51);
@@ -104,7 +105,7 @@ public class FrameCliente {
 		}
 		return txtFieldMensajes;
 	}
-	private JButton getBtnEnviar() {
+	public JButton getBtnEnviar() {
 		if (btnEnviar == null) {
 			btnEnviar = new JButton("Enviar");
 			btnEnviar.addActionListener(new ActionListener() {
@@ -115,7 +116,7 @@ public class FrameCliente {
 		}
 		return btnEnviar;
 	}
-	private JButton getBtnSalir() {
+	public JButton getBtnSalir() {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Salir");
 			btnSalir.addActionListener(new ActionListener() {
@@ -127,7 +128,7 @@ public class FrameCliente {
 		}
 		return btnSalir;
 	}
-	private JPanel getPanelLogin() {
+	public JPanel getPanelLogin() {
 		if (panelLogin == null) {
 			panelLogin = new JPanel();
 			panelLogin.setBackground(new Color(255, 228, 181));
@@ -141,28 +142,28 @@ public class FrameCliente {
 		}
 		return panelLogin;
 	}
-	private JLabel getLblUsuario() {
+	public JLabel getLblUsuario() {
 		if (lblUsuario == null) {
 			lblUsuario = new JLabel("Usuario:");
 			lblUsuario.setBounds(23, 31, 48, 14);
 		}
 		return lblUsuario;
 	}
-	private JLabel getLblPassword() {
+	public JLabel getLblPassword() {
 		if (lblPassword == null) {
 			lblPassword = new JLabel("Password:");
 			lblPassword.setBounds(23, 79, 70, 14);
 		}
 		return lblPassword;
 	}
-	private JPasswordField getPswField() {
+	public JPasswordField getPswField() {
 		if (pswField == null) {
 			pswField = new JPasswordField();
 			pswField.setBounds(118, 76, 125, 20);
 		}
 		return pswField;
 	}
-	private JTextField getTxtFieldUsuario() {
+	public JTextField getTxtFieldUsuario() {
 		if (txtFieldUsuario == null) {
 			txtFieldUsuario = new JTextField();
 			txtFieldUsuario.setBounds(118, 28, 125, 20);
@@ -170,7 +171,7 @@ public class FrameCliente {
 		}
 		return txtFieldUsuario;
 	}
-	private JButton getBtnAceptar() {
+	public JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
