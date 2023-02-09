@@ -9,7 +9,7 @@ public class ChatClient {
       PrintWriter out = null;
       BufferedReader in = null;
       try {
-         socket = new Socket("192.168.165.244", 4444);
+         socket = new Socket("localhost", 3561);
          out = new PrintWriter(socket.getOutputStream(), true);
          in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       } catch (UnknownHostException e) {

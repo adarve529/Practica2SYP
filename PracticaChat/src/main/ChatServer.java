@@ -7,7 +7,7 @@ public class ChatServer {
    public static void main(String[] args) throws IOException {
       ServerSocket serverSocket = null;
       try {
-         serverSocket = new ServerSocket(9800);
+         serverSocket = new ServerSocket(3561);
       } catch (IOException e) {
          System.err.println("Could not listen on port: 9800.");
          System.exit(1);
