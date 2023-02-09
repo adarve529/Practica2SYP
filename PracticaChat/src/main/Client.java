@@ -23,7 +23,7 @@ public class Client {
         out.writeUTF(message);
 
         message = in.readUTF();
-        System.out.println("Mensaje del server: " + message);
+        System.out.println("Mensaje del servidor: " + message);
       }
     } catch (IOException e) {
       e.printStackTrace();
