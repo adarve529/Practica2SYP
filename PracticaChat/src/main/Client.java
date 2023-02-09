@@ -12,6 +12,7 @@ public class Client {
 	  //abrimos el frame cliente
 	  FrameCliente.main(args);
 	  
+	  
 	  try {
       Socket socket = new Socket("192.168.165.244", 3434);
       System.out.println("Conectado al servidor");

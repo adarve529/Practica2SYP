@@ -46,6 +46,7 @@ public class FrameCliente {
 			}
 		});
 	}
+	
 
 	/**
 	 * Create the application.
