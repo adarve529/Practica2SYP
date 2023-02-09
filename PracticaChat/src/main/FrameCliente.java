@@ -35,16 +35,16 @@ public class FrameCliente {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//				FrameCliente window = new FrameCliente();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+				FrameCliente window = new FrameCliente();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
@@ -65,6 +65,7 @@ public class FrameCliente {
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
+		frame.getContentPane().setVisible(true);
 		frame.getContentPane().add(getPanelLogin());
 		frame.getContentPane().add(getLblImagenUsuario());
 		frame.getContentPane().add(getTxtConversacion());
