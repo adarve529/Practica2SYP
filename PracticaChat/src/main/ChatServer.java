@@ -1,77 +1,38 @@
 package main;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.io.*;
+import java.net.*;
 
 public class ChatServer {
-
-    static ArrayList<Socket> clientSockets;
-    static ArrayList<String> userNames;
-
-    public static void main(String[] args) {
-    	
-    	FrameServidor frameServer = new FrameServidor();
-    	
-        clientSockets = new ArrayList<>();
-        userNames = new ArrayList<>();
-        try {
-            ServerSocket serverSocket = new ServerSocket(9800);
-            System.out.println("Servidor iniciado");
-
-            while (true) {
-                Socket socket = serverSocket.accept();
-                clientSockets.add(socket);
-                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-                String name = dataInputStream.readUTF();
-                userNames.add(name);
-                System.out.println("Usuario conectado: " + name);
-                ClientHandler clientHandler = new ClientHandler(socket, name);
-                Thread thread = new Thread(clientHandler);
-                thread.start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+   public static void main(String[] args) throws IOException {
+      ServerSocket serverSocket = null;
+      try {
+         serverSocket = new ServerSocket(9800);
+      } catch (IOException e) {
+         System.err.println("Could not listen on port: 9800.");
+         System.exit(1);
+      }
+      Socket clientSocket = null;
+      System.out.println("Waiting for client...");
+      try {
+         clientSocket = serverSocket.accept();
+      } catch (IOException e) {
+         System.err.println("Accept failed.");
+         System.exit(1);
+      }
+      System.out.println("Client connected.");
+      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+      BufferedReader in = new BufferedReader(
+                 new InputStreamReader(
+                 clientSocket.getInputStream()));
+      String inputLine;
+      while ((inputLine = in.readLine()) != null) {
+         System.out.println("Client says: " + inputLine);
+         out.println(inputLine);
+      }
+      out.close();
+      in.close();
+      clientSocket.close();
+      serverSocket.close();
+   }
 }
-
-class ClientHandler implements Runnable {
-    private Socket socket;
-    private DataInputStream dataInputStream;
-    private DataOutputStream dataOutputStream;
-    private String name;
-
-    public ClientHandler(Socket socket, String name) {
-        this.socket = socket;
-        this.name = name;
-        try {
-            dataInputStream = new DataInputStream(socket.getInputStream());
-            dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void run() {
-        String received;
-        while (true) {
-            try {
-                received = dataInputStream.readUTF();
-                System.out.println(received);
-                for (int i = 0; i < ChatServer.clientSockets.size(); i++) {
-                    Socket temp = ChatServer.clientSockets.get(i);
-                    DataOutputStream dataOutputStream = new DataOutputStream(temp.getOutputStream());
-                    dataOutputStream.writeUTF(name + ": " + received);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-

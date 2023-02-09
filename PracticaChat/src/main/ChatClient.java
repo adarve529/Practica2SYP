@@ -1,56 +1,33 @@
 package main;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
 
 public class ChatClient {
-
-    public static void main(String[] args) {
-    	
-    	FrameCliente frameClient = new FrameCliente();
-        try {
-            Socket socket = new Socket("localhost", 9800);
-            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Ingrese su nombre: ");
-            String name = scanner.nextLine();
-            dataOutputStream.writeUTF(name);
-
-            ReadMessageThread readMessageThread = new ReadMessageThread(dataInputStream);
-            readMessageThread.start();
-
-            while (true) {
-                String message = scanner.nextLine();
-                dataOutputStream.writeUTF(message);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+   public static void main(String[] args) throws IOException {
+      Socket socket = null;
+      PrintWriter out = null;
+      BufferedReader in = null;
+      try {
+         socket = new Socket("192.168.165.244", 9800);
+         out = new PrintWriter(socket.getOutputStream(), true);
+         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      } catch (UnknownHostException e) {
+         System.err.println("Unknown host: localhost");
+         System.exit(1);
+      } catch (IOException e) {
+         System.err.println("No I/O");
+         System.exit(1);
+      }
+      BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+      String userInput;
+      while ((userInput = stdIn.readLine()) != null) {
+         out.println(userInput);
+         System.out.println("Server says: " + in.readLine());
+      }
+      out.close();
+      in.close();
+      stdIn.close();
+      socket.close();
+   }
 }
-
-class ReadMessageThread extends Thread {
-    private DataInputStream dataInputStream;
-
-    public ReadMessageThread(DataInputStream dataInputStream) {
-        this.dataInputStream = dataInputStream;
-    }
-
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                String message = dataInputStream.readUTF();
-                System.out.println(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-
