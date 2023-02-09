@@ -65,8 +65,8 @@ public class FrameCliente {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
-		frame.setVisible(true);
-		frame.getContentPane().setVisible(true);
+		
+		frame.setResizable(false);
 		frame.getContentPane().add(getPanelLogin());
 		frame.getContentPane().add(getLblImagenUsuario());
 		frame.getContentPane().add(getTxtConversacion());

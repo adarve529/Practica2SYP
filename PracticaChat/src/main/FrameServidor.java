@@ -56,11 +56,13 @@ public class FrameServidor {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
-		frame.setVisible(true);
+		
+		frame.setResizable(false);
 		frame.getContentPane().add(getLblImagenUsuario());
 		frame.getContentPane().add(getTxtConversacion());
 		frame.getContentPane().add(getTxtFieldMensajes());
 		frame.getContentPane().add(getBtnEnviar());
+		
 	}
 	private JLabel getLblImagenUsuario() {
 		if (lblImagenUsuario == null) {

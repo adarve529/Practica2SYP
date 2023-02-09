@@ -11,6 +11,7 @@ public class Client {
    
 	  //abrimos el frame cliente
 	  FrameCliente.main(args);
+	 // FrameCliente frameClient = new FrameCliente();
 	  
 	  
 	  try {
