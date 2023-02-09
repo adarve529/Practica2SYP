@@ -5,35 +5,32 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Server {
-  public static void main(String[] args) {
-    try {
-      ServerSocket serverSocket = new ServerSocket(1234);
-      System.out.println("Servidor iniciado en el puerto 1234");
+	  public static void main(String[] args) {
+	    try {
+	      ServerSocket serverSocket = new ServerSocket(3434);
+	      System.out.println("Servidor iniciado, esperando conexiones");
 
-      Socket clientSocket = serverSocket.accept();
-      System.out.println("Cliente conectado");
+	      Socket socket = serverSocket.accept();
+	      System.out.println("Cliente conectado");
 
-      DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-      DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+	      DataInputStream in = new DataInputStream(socket.getInputStream());
+	      DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-      while (true) {
-        String message = in.readUTF();
-        System.out.println("Mensaje recibido del cliente: " + message);
+	      while (true) {
+	        String message = in.readUTF();
+	        System.out.println("Mensaje del cliente: " + message);
 
-        if (message.equals("cerrar")) {
-          System.out.println("Cerrando conexión con el cliente");
-          break;
-        }
+	        System.out.print("Escribe un mensaje: ");
+	        Scanner scanner = new Scanner(System.in);
+	        message = scanner.nextLine();
 
-        out.writeUTF("Mensaje del servidor: " + message);
-      }
-
-      clientSocket.close();
-      serverSocket.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-}
+	        out.writeUTF(message);
+	      }
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	  }
+	}

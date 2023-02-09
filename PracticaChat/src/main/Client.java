@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Client {
   public static void main(String[] args) {
     try {
-      Socket socket = new Socket("192.168.165.244", 1234);
+      Socket socket = new Socket("192.168.165.244", 3434);
       System.out.println("Conectado al servidor");
 
       DataInputStream in = new DataInputStream(socket.getInputStream());
