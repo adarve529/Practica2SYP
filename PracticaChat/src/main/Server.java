@@ -9,8 +9,8 @@ import java.net.Socket;
 public class Server {
   public static void main(String[] args) {
     try {
-      ServerSocket serverSocket = new ServerSocket(1234);
-      System.out.println("Servidor iniciado en el puerto 1234");
+      ServerSocket serverSocket = new ServerSocket(3434);
+      System.out.println("Servidor iniciado en el puerto 3434");
 
       Socket clientSocket = serverSocket.accept();
       System.out.println("Cliente conectado");
