@@ -10,8 +10,7 @@ import java.util.Scanner;
 public class Server {
 	  public static void main(String[] args) {
 	    
-		  FrameServidor window = new FrameServidor();
-		  window.initialize();
+		  FrameServidor.main(args);
 		  
 		  try {
 	      ServerSocket serverSocket = new ServerSocket(3434);
