@@ -5,9 +5,11 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -18,23 +20,24 @@ import java.awt.Font;
 
 public class FrameCliente {
 
-	private JFrame frame;
-	private JLabel lblImagenUsuario;
-	private JTextArea txtConversacion;
-	private JTextField txtFieldMensajes;
-	private JButton btnEnviar;
-	private JButton btnSalir;
-	private JPanel panelLogin;
-	private JLabel lblUsuario;
-	private JLabel lblPassword;
-	private JPasswordField pswField;
-	private JTextField txtFieldUsuario;
-	private JButton btnAceptar;
+	public JFrame frame;
+	public JLabel lblImagenUsuario;
+	public JTextArea txtConversacion;
+	public JTextField txtFieldMensajes;
+	public JButton btnEnviar;
+	public JButton btnSalir;
+	public JPanel panelLogin;
+	public JLabel lblUsuario;
+	public JLabel lblPassword;
+	public JPasswordField pswField;
+	public JTextField txtFieldUsuario;
+	public JButton btnAceptar;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+
+	public void apertura() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -178,15 +181,26 @@ public class FrameCliente {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(1==1) {
-						getPanelLogin().setVisible(false);
-						getPanelLogin().setEnabled(false);
-					}
-				}
-			});
+					  
+					  String username = txtFieldUsuario.getText();
+					  char[] passwordChar = pswField.getPassword();
+					  String password = new String(passwordChar);
+		 			  
+		 			  if (username.equals("admin") && password.equals("admin")) {
+			 		      // Acceso permitido
+			 		      System.out.println("acceso permitido");
+			 		     getPanelLogin().setVisible(false);
+						 getPanelLogin().setEnabled(false);
+			 		  } else {
+					      // Acceso denegado
+		 			       System.out.println("acceso denegado");
+		  			  }
+		 	 	}
+		  	});
 			btnAceptar.setBounds(89, 107, 89, 23);
 		}
 		return btnAceptar;
 	}
+	
 }
 

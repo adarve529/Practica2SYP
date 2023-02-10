@@ -10,12 +10,14 @@ public class Client {
   public static void main(String[] args) {
    
 	  //abrimos el frame cliente
-	  FrameCliente.main(args);
-	 // FrameCliente frameClient = new FrameCliente();
-	  
+	 // FrameCliente.main(args);
+	  FrameCliente frameClient = new FrameCliente();
+	  frameClient.apertura();
 	  
 	  try {
-      Socket socket = new Socket("192.168.165.244", 3434);
+        
+		 
+	  Socket socket = new Socket("localhost", 3434);
       System.out.println("Conectado al servidor");
 
       DataInputStream in = new DataInputStream(socket.getInputStream());
