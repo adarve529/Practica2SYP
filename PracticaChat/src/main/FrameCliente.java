@@ -15,39 +15,83 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
 public class FrameCliente {
 
 	public JFrame frame;
-	public JLabel lblImagenUsuario;
-	public JTextArea txtConversacion;
-	public JTextField txtFieldMensajes;
-	public JButton btnEnviar;
-	public JButton btnSalir;
-	public JPanel panelLogin;
-	public JLabel lblUsuario;
-	public JLabel lblPassword;
-	public JPasswordField pswField;
-	public JTextField txtFieldUsuario;
-	public JButton btnAceptar;
+	static JLabel lblImagenUsuario;
+	static JTextArea txtConversacion;
+	static JTextField txtFieldMensajes;
+	static JButton btnEnviar;
+	static JButton btnSalir;
+	static JPanel panelLogin;
+	static JLabel lblUsuario;
+	static JLabel lblPassword;
+	static JPasswordField pswField;
+	static JTextField txtFieldUsuario;
+	static JButton btnAceptar;
+	static Socket socket;
+	static DataInputStream in;
+	static DataOutputStream out; 
+	static boolean isClosed;
+    static Date date;
 
 	/**
 	 * Launch the application.
 	 */
 
-	public void apertura() {
+	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 				FrameCliente window = new FrameCliente();
-					window.frame.setVisible(true);
+				  window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		
+		 date = new Date();
+		 SimpleDateFormat dateFormat = new SimpleDateFormat(" HH:mm");
+		 String formattedDate = dateFormat.format(date);
+			
+			  try {
+			        		
+				  socket = new Socket("localhost", 3434);
+			      System.out.println("Conectado al servidor");
+
+			      in = new DataInputStream(socket.getInputStream());
+			      out = new DataOutputStream(socket.getOutputStream());			  
+			      
+			      String mensaje = "";
+			      isClosed = false;
+			       
+			      while (!isClosed) {	
+
+			        mensaje = in.readUTF() + "  " + formattedDate;
+			        txtConversacion.setText(txtConversacion.getText().trim() + "\n Server: " + mensaje);
+
+			      
+			      } if(isClosed) {
+			    	  socket.close();
+			      }
+			     
+			      
+			    } catch (IOException e) {
+			      e.printStackTrace();
+			    }
 	}
 	
 
@@ -77,7 +121,7 @@ public class FrameCliente {
 		frame.getContentPane().add(getBtnEnviar());
 		frame.getContentPane().add(getBtnSalir());
 	}
-	public JLabel getLblImagenUsuario() {
+	public static JLabel getLblImagenUsuario() {
 		if (lblImagenUsuario == null) {
 			lblImagenUsuario = new JLabel("");
 			lblImagenUsuario.setBounds(163, 11, 113, 109);
@@ -92,7 +136,7 @@ public class FrameCliente {
 		}
 		return lblImagenUsuario;
 	}
-	public JTextArea getTxtConversacion() {
+	public static JTextArea getTxtConversacion() {
 		if (txtConversacion == null) {
 			txtConversacion = new JTextArea();
 			txtConversacion.setFont(new Font("Courier New", Font.PLAIN, 14));
@@ -102,38 +146,60 @@ public class FrameCliente {
 		}
 		return txtConversacion;
 	}
-	public JTextField getTxtFieldMensajes() {
+	public static JTextField getTxtFieldMensajes() {
 		if (txtFieldMensajes == null) {
 			txtFieldMensajes = new JTextField();
 			txtFieldMensajes.setBounds(10, 401, 424, 51);
 			txtFieldMensajes.setColumns(10);
+			txtFieldMensajes.setFont(new Font("Courier New", Font.PLAIN, 14));
 		}
 		return txtFieldMensajes;
 	}
-	public JButton getBtnEnviar() {
+	public static JButton getBtnEnviar() {
 		if (btnEnviar == null) {
 			btnEnviar = new JButton("Enviar");
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+							
+					try {
+						
+						if(!txtFieldMensajes.getText().trim().isEmpty()) {
+							
+							String mensaje = "";
+							mensaje = txtFieldMensajes.getText().trim();
+							out.writeUTF(mensaje);
+							
+							txtFieldMensajes.setText("");		
+						}
+																		
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
 				}
 			});
 			btnEnviar.setBounds(10, 463, 105, 44);
 		}
 		return btnEnviar;
 	}
-	public JButton getBtnSalir() {
+	public static JButton getBtnSalir() {
 		if (btnSalir == null) {
 			btnSalir = new JButton("Salir");
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
+					isClosed = true;
+					txtConversacion.setText(txtConversacion.getText() + "\n Conexión finalizada");
 					System.exit(0);
+				
 				}
 			});
 			btnSalir.setBounds(329, 463, 105, 44);
+			
 		}
 		return btnSalir;
 	}
-	public JPanel getPanelLogin() {
+	public static JPanel getPanelLogin() {
 		if (panelLogin == null) {
 			panelLogin = new JPanel();
 			panelLogin.setBackground(new Color(255, 228, 181));
@@ -147,28 +213,28 @@ public class FrameCliente {
 		}
 		return panelLogin;
 	}
-	public JLabel getLblUsuario() {
+	public static JLabel getLblUsuario() {
 		if (lblUsuario == null) {
 			lblUsuario = new JLabel("Usuario:");
 			lblUsuario.setBounds(23, 31, 48, 14);
 		}
 		return lblUsuario;
 	}
-	public JLabel getLblPassword() {
+	public static JLabel getLblPassword() {
 		if (lblPassword == null) {
 			lblPassword = new JLabel("Password:");
 			lblPassword.setBounds(23, 79, 70, 14);
 		}
 		return lblPassword;
 	}
-	public JPasswordField getPswField() {
+	public static JPasswordField getPswField() {
 		if (pswField == null) {
 			pswField = new JPasswordField();
 			pswField.setBounds(118, 76, 125, 20);
 		}
 		return pswField;
 	}
-	public JTextField getTxtFieldUsuario() {
+	public static JTextField getTxtFieldUsuario() {
 		if (txtFieldUsuario == null) {
 			txtFieldUsuario = new JTextField();
 			txtFieldUsuario.setBounds(118, 28, 125, 20);
@@ -176,24 +242,27 @@ public class FrameCliente {
 		}
 		return txtFieldUsuario;
 	}
-	public JButton getBtnAceptar() {
+	public static JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					  
-					  String username = txtFieldUsuario.getText();
-					  char[] passwordChar = pswField.getPassword();
-					  String password = new String(passwordChar);
 		 			  
-		 			  if (username.equals("admin") && password.equals("admin")) {
+		 			  if (validacion()) {
 			 		      // Acceso permitido
-			 		      System.out.println("acceso permitido");
+			 		     // System.out.println("acceso permitido");
+		 				  txtConversacion.setText(txtConversacion.getText() + "\n Conexión establecida corréctamente.");
 			 		     getPanelLogin().setVisible(false);
 						 getPanelLogin().setEnabled(false);
 			 		  } else {
+			 			  
 					      // Acceso denegado
-		 			       System.out.println("acceso denegado");
+			 			 txtConversacion.setText(txtConversacion.getText() + "\n Conexión fallida.");
+		 			     txtConversacion.setText(txtConversacion.getText() + "\n Introduce usuario y password...");
+			 			 getPanelLogin().setVisible(true);
+						 getPanelLogin().setEnabled(true);
+		 			     
 		  			  }
 		 	 	}
 		  	});
@@ -202,5 +271,20 @@ public class FrameCliente {
 		return btnAceptar;
 	}
 	
+	public static boolean validacion() {
+		
+		String username = txtFieldUsuario.getText();
+		  char[] passwordChar = pswField.getPassword();
+		  String password = new String(passwordChar);
+		  
+		  if (username.equals("admin") && password.equals("admin")) {
+		      // Acceso permitido
+			 return true;
+
+		  } else {
+		      // Acceso denegado
+		       return false;
+		  }	
+	}	
 }
 

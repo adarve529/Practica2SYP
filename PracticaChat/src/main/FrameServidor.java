@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.JFrame;
@@ -13,20 +14,36 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
 import java.awt.event.ActionEvent;
 
 public class FrameServidor {
 
-	private JFrame frame;
-	private JLabel lblImagenUsuario;
-	private JTextArea txtConversacion;
-	private JTextField txtFieldMensajes;
-	private JButton btnEnviar;
+	 public JFrame frame;
+	 static JLabel lblImagenUsuario;
+	 static JTextArea txtConversacion;
+	 static JTextField txtFieldMensajes;
+	 static JButton btnEnviar;
+	 static ServerSocket serverSocket;
+	 static Socket socket;
+	 static DataInputStream in;
+	 static DataOutputStream out;
+	 static Date date;
+	
 
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -37,6 +54,46 @@ public class FrameServidor {
 				}
 			}
 		});
+		
+		 date = new Date();
+		 SimpleDateFormat dateFormat = new SimpleDateFormat(" HH:mm");
+		 String formattedDate = dateFormat.format(date);
+				
+		 String mensaje = "";
+		 
+		  try {
+		      serverSocket = new ServerSocket(3434);
+		      getTxtConversacion().setText("Servidor arrancado.");
+		      
+		      socket = serverSocket.accept();
+		      getTxtConversacion().setText(getTxtConversacion().getText() + "\n Cliente conectado.");
+	     
+		       in = new DataInputStream(socket.getInputStream());
+		       out = new DataOutputStream(socket.getOutputStream());
+	
+		       
+		       
+		       
+		      while (!FrameCliente.isClosed) {
+		        mensaje = in.readUTF() + "  " + formattedDate;
+		        txtConversacion.setText(txtConversacion.getText().trim() + "\n Cliente: " + mensaje);
+		        
+
+		       // System.out.print("Escribe un mensaje: ");
+//		        Scanner scanner = new Scanner(System.in);
+//		        mensaje = scanner.nextLine();
+//
+//		        out.writeUTF(mensaje);
+		        
+		      }
+		      if(FrameCliente.isClosed) {
+		    	  socket.close();
+		      }
+		     	     
+		      
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }
 	}
 
 	/**
@@ -64,7 +121,7 @@ public class FrameServidor {
 		frame.getContentPane().add(getBtnEnviar());
 		
 	}
-	private JLabel getLblImagenUsuario() {
+	public static JLabel getLblImagenUsuario() {
 		if (lblImagenUsuario == null) {
 			lblImagenUsuario = new JLabel("");
 			lblImagenUsuario.setBounds(163, 11, 113, 109);
@@ -79,27 +136,47 @@ public class FrameServidor {
 		}
 		return lblImagenUsuario;
 	}
-	private JTextArea getTxtConversacion() {
+	public static JTextArea getTxtConversacion() {
 		if (txtConversacion == null) {
 			txtConversacion = new JTextArea();
+			txtConversacion.setText(null);
+			txtConversacion.setFont(new Font("Courier New", Font.PLAIN, 14));
 			txtConversacion.setEditable(false);
 			txtConversacion.setBounds(10, 131, 423, 259);
 		}
 		return txtConversacion;
 	}
-	private JTextField getTxtFieldMensajes() {
+	public static JTextField getTxtFieldMensajes() {
 		if (txtFieldMensajes == null) {
 			txtFieldMensajes = new JTextField();
 			txtFieldMensajes.setBounds(10, 401, 424, 51);
 			txtFieldMensajes.setColumns(10);
+			txtFieldMensajes.setFont(new Font("Courier New", Font.PLAIN, 14));
 		}
 		return txtFieldMensajes;
 	}
-	private JButton getBtnEnviar() {
+	public static JButton getBtnEnviar() {
 		if (btnEnviar == null) {
 			btnEnviar = new JButton("Enviar");
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+						
+					try {
+						
+						if(!txtFieldMensajes.getText().trim().isEmpty()) {
+							
+							String mensaje = "";
+							mensaje = txtFieldMensajes.getText().trim();
+							out.writeUTF(mensaje);	
+							txtFieldMensajes.setText("");
+						}
+																		
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
+					
+					
 				}
 			});
 			btnEnviar.setBounds(10, 463, 105, 44);
