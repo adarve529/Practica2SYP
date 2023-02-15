@@ -63,13 +63,13 @@ public class FrameCliente {
 			}
 		});
 		
-		 date = new Date();
-		 SimpleDateFormat dateFormat = new SimpleDateFormat(" HH:mm");
-		 String formattedDate = dateFormat.format(date);
+//		 date = new Date();
+//		 SimpleDateFormat dateFormat = new SimpleDateFormat(" HH:mm");
+//		 String formattedDate = dateFormat.format(date);
 			
 			  try {
 			        		
-				  socket = new Socket("localhost", 3434);
+				  socket = new Socket("192.168.165.244", 3434);
 			      System.out.println("Conectado al servidor");
 
 			      in = new DataInputStream(socket.getInputStream());
@@ -80,7 +80,7 @@ public class FrameCliente {
 			       
 			      while (!isClosed) {	
 
-			        mensaje = in.readUTF() + "  " + formattedDate;
+			        mensaje = in.readUTF();
 			        txtConversacion.setText(txtConversacion.getText().trim() + "\n Server: " + mensaje);
 
 			      
@@ -190,7 +190,7 @@ public class FrameCliente {
 					
 					isClosed = true;
 					txtConversacion.setText(txtConversacion.getText() + "\n Conexión finalizada");
-					System.exit(0);
+					
 				
 				}
 			});
@@ -262,6 +262,7 @@ public class FrameCliente {
 		 			     txtConversacion.setText(txtConversacion.getText() + "\n Introduce usuario y password...");
 			 			 getPanelLogin().setVisible(true);
 						 getPanelLogin().setEnabled(true);
+						
 		 			     
 		  			  }
 		 	 	}

@@ -55,9 +55,9 @@ public class FrameServidor {
 			}
 		});
 		
-		 date = new Date();
-		 SimpleDateFormat dateFormat = new SimpleDateFormat(" HH:mm");
-		 String formattedDate = dateFormat.format(date);
+//		 date = new Date();
+//		 SimpleDateFormat dateFormat = new SimpleDateFormat(" HH:mm");
+//		 String formattedDate = dateFormat.format(date);
 				
 		 String mensaje = "";
 		 
@@ -75,7 +75,7 @@ public class FrameServidor {
 		       
 		       
 		      while (!FrameCliente.isClosed) {
-		        mensaje = in.readUTF() + "  " + formattedDate;
+		        mensaje = in.readUTF();
 		        txtConversacion.setText(txtConversacion.getText().trim() + "\n Cliente: " + mensaje);
 		        
 
