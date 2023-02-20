@@ -69,7 +69,7 @@ public class FrameCliente {
 			
 			  try {
 			        		
-				  socket = new Socket("192.168.165.244", 3434);
+				  socket = new Socket("192.168.166.204", 3434);
 			      System.out.println("Conectado al servidor");
 
 			      in = new DataInputStream(socket.getInputStream());

@@ -78,12 +78,7 @@ public class FrameServidor {
 		        mensaje = in.readUTF();
 		        txtConversacion.setText(txtConversacion.getText().trim() + "\n Cliente: " + mensaje);
 		        
-
-		       // System.out.print("Escribe un mensaje: ");
-//		        Scanner scanner = new Scanner(System.in);
-//		        mensaje = scanner.nextLine();
-//
-//		        out.writeUTF(mensaje);
+     	        out.writeUTF(mensaje);
 		        
 		      }
 		      if(FrameCliente.isClosed) {
