@@ -9,22 +9,20 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import java.awt.Color;
-import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
-public class FrameServidor {
+public class FrameServidor{
 
 	 public JFrame frame;
 	 static JLabel lblImagenUsuario;
@@ -36,6 +34,9 @@ public class FrameServidor {
 	 static DataInputStream in;
 	 static DataOutputStream out;
 	 static Date date;
+	 
+	 static boolean validacion;
+	 private static JScrollPane scrollPane;
 	
 
 	/**
@@ -55,6 +56,7 @@ public class FrameServidor {
 			}
 		});
 		
+        
 //		 date = new Date();
 //		 SimpleDateFormat dateFormat = new SimpleDateFormat(" HH:mm");
 //		 String formattedDate = dateFormat.format(date);
@@ -65,24 +67,31 @@ public class FrameServidor {
 		      serverSocket = new ServerSocket(3434);
 		      getTxtConversacion().setText("Servidor arrancado.");
 		      
+		      
 		      socket = serverSocket.accept();
-		      getTxtConversacion().setText(getTxtConversacion().getText() + "\n Cliente conectado.");
+//		      getTxtConversacion().setText(getTxtConversacion().getText() + "\n Cliente conectado.");
 	     
 		       in = new DataInputStream(socket.getInputStream());
 		       out = new DataOutputStream(socket.getOutputStream());
 	
 		       
-		       
-		       
-		      while (!FrameCliente.isClosed) {
-		        mensaje = in.readUTF();
-		        txtConversacion.setText(txtConversacion.getText().trim() + "\n Cliente: " + mensaje);
-		        
 
-		       // System.out.print("Escribe un mensaje: ");
-//		        Scanner scanner = new Scanner(System.in);
-//		        mensaje = scanner.nextLine();
-//
+
+		       while (!FrameCliente.isClosed) {
+		    	   mensaje = in.readUTF();
+		    	   if(mensaje.equals("ttt_gh56h")) {
+		    		   txtFieldMensajes.setEditable(true);
+		    	   }
+		    	   else {
+		    	   System.out.println(mensaje);
+		    		   txtConversacion.setText(txtConversacion.getText().trim() + "\n Cliente: " + mensaje);
+		    	   }
+		    	   
+
+		    	   // System.out.print("Escribe un mensaje: ");
+		    	   //		        Scanner scanner = new Scanner(System.in);
+		    	   //		        mensaje = scanner.nextLine();
+		    	   //
 //		        out.writeUTF(mensaje);
 		        
 		      }
@@ -100,6 +109,7 @@ public class FrameServidor {
 	 * Create the application.
 	 */
 	public FrameServidor() {
+		validacion = false;
 		initialize();
 	}
 
@@ -113,10 +123,9 @@ public class FrameServidor {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
-		
+		frame.getContentPane().add(getScrollPane());
 		frame.setResizable(false);
 		frame.getContentPane().add(getLblImagenUsuario());
-		frame.getContentPane().add(getTxtConversacion());
 		frame.getContentPane().add(getTxtFieldMensajes());
 		frame.getContentPane().add(getBtnEnviar());
 		
@@ -142,15 +151,25 @@ public class FrameServidor {
 			txtConversacion.setText(null);
 			txtConversacion.setFont(new Font("Courier New", Font.PLAIN, 14));
 			txtConversacion.setEditable(false);
-			txtConversacion.setBounds(10, 131, 423, 259);
 		}
 		return txtConversacion;
 	}
+	
+	private static JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(10, 118, 424, 272);
+			scrollPane.setViewportView(getTxtConversacion());
+		}
+		return scrollPane;
+	}
+	
 	public static JTextField getTxtFieldMensajes() {
 		if (txtFieldMensajes == null) {
 			txtFieldMensajes = new JTextField();
 			txtFieldMensajes.setBounds(10, 401, 424, 51);
 			txtFieldMensajes.setColumns(10);
+			txtFieldMensajes.setEditable(false);
 			txtFieldMensajes.setFont(new Font("Courier New", Font.PLAIN, 14));
 		}
 		return txtFieldMensajes;
@@ -169,6 +188,9 @@ public class FrameServidor {
 							mensaje = txtFieldMensajes.getText().trim();
 							out.writeUTF(mensaje);	
 							txtFieldMensajes.setText("");
+							
+							txtConversacion.setText(txtConversacion.getText().trim() + "\n>>>>> Servidor: " + mensaje);
+							
 						}
 																		
 					} catch (IOException e1) {
@@ -183,6 +205,7 @@ public class FrameServidor {
 		}
 		return btnEnviar;
 	}
+	
 }
 
 
