@@ -18,17 +18,15 @@ import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class FrameCliente {
 
-	public JFrame frame;
+	public static JFrame frame;
 	static JLabel lblImagenUsuario;
 	static JTextArea txtConversacion;
 	static JTextField txtFieldMensajes;
@@ -46,6 +44,14 @@ public class FrameCliente {
 	static boolean isClosed;
     static Date date;
 
+    static boolean validacion;
+    private JScrollPane scrollPane;
+    private static JLabel lblDireccion;
+    private static JTextField txtFieldDireccion;
+    
+    
+    static String direccion;
+    
 	/**
 	 * Launch the application.
 	 */
@@ -68,18 +74,30 @@ public class FrameCliente {
 //		 String formattedDate = dateFormat.format(date);
 			
 			  try {
+				  
+				  //192.168.166.204
 			        		
+
 				  socket = new Socket("192.168.166.204", 3434);
+
+				  socket = new Socket(direccion, 3434);
+
 			      System.out.println("Conectado al servidor");
 
+			      
 			      in = new DataInputStream(socket.getInputStream());
 			      out = new DataOutputStream(socket.getOutputStream());			  
 			      
 			      String mensaje = "";
 			      isClosed = false;
-			       
+//			      System.out.println(validacion);
 			      while (!isClosed) {	
-
+			    	  
+//			    		System.out.println(validacion);
+//			    		out.writeUTF("ttt_gh56h");
+//			    		System.out.println("validacion a true y mando mensaje a servidor");
+//						out.writeUTF("\nCliente conectado.");
+						
 			        mensaje = in.readUTF();
 			        txtConversacion.setText(txtConversacion.getText().trim() + "\n Server: " + mensaje);
 
@@ -116,10 +134,10 @@ public class FrameCliente {
 		frame.setResizable(false);
 		frame.getContentPane().add(getPanelLogin());
 		frame.getContentPane().add(getLblImagenUsuario());
-		frame.getContentPane().add(getTxtConversacion());
 		frame.getContentPane().add(getTxtFieldMensajes());
 		frame.getContentPane().add(getBtnEnviar());
 		frame.getContentPane().add(getBtnSalir());
+		frame.getContentPane().add(getScrollPane());
 	}
 	public static JLabel getLblImagenUsuario() {
 		if (lblImagenUsuario == null) {
@@ -142,13 +160,23 @@ public class FrameCliente {
 			txtConversacion.setFont(new Font("Courier New", Font.PLAIN, 14));
 			txtConversacion.setText("Introduce usuario y password...");
 			txtConversacion.setEditable(false);
-			txtConversacion.setBounds(10, 131, 423, 259);
 		}
 		return txtConversacion;
 	}
+	
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(10, 118, 424, 272);
+			scrollPane.setViewportView(getTxtConversacion());
+		}
+		return scrollPane;
+	}
+	
 	public static JTextField getTxtFieldMensajes() {
 		if (txtFieldMensajes == null) {
 			txtFieldMensajes = new JTextField();
+			txtFieldMensajes.setEditable(false);
 			txtFieldMensajes.setBounds(10, 401, 424, 51);
 			txtFieldMensajes.setColumns(10);
 			txtFieldMensajes.setFont(new Font("Courier New", Font.PLAIN, 14));
@@ -169,7 +197,10 @@ public class FrameCliente {
 							mensaje = txtFieldMensajes.getText().trim();
 							out.writeUTF(mensaje);
 							
-							txtFieldMensajes.setText("");		
+							txtFieldMensajes.setText("");	
+							
+							txtConversacion.setText(txtConversacion.getText().trim() + "\n>>>>> Cliente: " + mensaje);
+							
 						}
 																		
 					} catch (IOException e1) {
@@ -210,6 +241,8 @@ public class FrameCliente {
 			panelLogin.add(getPswField());
 			panelLogin.add(getTxtFieldUsuario());
 			panelLogin.add(getBtnAceptar());
+			panelLogin.add(getLblDireccion());
+			panelLogin.add(getTxtFieldDireccion());
 		}
 		return panelLogin;
 	}
@@ -223,14 +256,14 @@ public class FrameCliente {
 	public static JLabel getLblPassword() {
 		if (lblPassword == null) {
 			lblPassword = new JLabel("Password:");
-			lblPassword.setBounds(23, 79, 70, 14);
+			lblPassword.setBounds(23, 59, 70, 14);
 		}
 		return lblPassword;
 	}
 	public static JPasswordField getPswField() {
 		if (pswField == null) {
 			pswField = new JPasswordField();
-			pswField.setBounds(118, 76, 125, 20);
+			pswField.setBounds(118, 56, 125, 20);
 		}
 		return pswField;
 	}
@@ -247,26 +280,43 @@ public class FrameCliente {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					  
-		 			  
-		 			  if (validacion()) {
-			 		      // Acceso permitido
-			 		     // System.out.println("acceso permitido");
-		 				  txtConversacion.setText(txtConversacion.getText() + "\n Conexión establecida corréctamente.");
-			 		     getPanelLogin().setVisible(false);
-						 getPanelLogin().setEnabled(false);
-			 		  } else {
-			 			  
-					      // Acceso denegado
-			 			 txtConversacion.setText(txtConversacion.getText() + "\n Conexión fallida.");
-		 			     txtConversacion.setText(txtConversacion.getText() + "\n Introduce usuario y password...");
-			 			 getPanelLogin().setVisible(true);
-						 getPanelLogin().setEnabled(true);
+
+					direccion = getTxtFieldDireccion().getText();
+					if (validacion()) {
+						// Acceso permitido
+						// System.out.println("acceso permitido");
+						txtConversacion.setText(txtConversacion.getText() + "\nConexión establecida corréctamente.");
+						getPanelLogin().setVisible(false);
+						getPanelLogin().setEnabled(false);
+
+						getTxtConversacion().setText(getTxtConversacion().getText() + "\nCliente conectado.");
+
+						txtFieldMensajes.setEditable(true);
 						
-		 			     
-		  			  }
-		 	 	}
-		  	});
+						try {
+							out.writeUTF("ttt_gh56h");
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						System.out.println("envio a servidor ttt_gh56h");
+						
+					} else {
+
+						// Acceso denegado
+//						txtConversacion.setText(txtConversacion.getText() + "\n Conexión fallida.");
+//						txtConversacion.setText(txtConversacion.getText() + "\n Introduce usuario y password...");
+						
+//						frame.setComponentZOrder(getPanelLogin(), 0);
+						
+						JOptionPane.showMessageDialog(frame, "Conexion fallida.\nIntroduce de nuevo los campos.","ERROR", JOptionPane.ERROR_MESSAGE);
+						getTxtFieldUsuario().setText("");
+						getTxtFieldDireccion().setText("");
+						getPswField().setText("");
+
+
+					}
+				}
+			});
 			btnAceptar.setBounds(89, 107, 89, 23);
 		}
 		return btnAceptar;
@@ -280,12 +330,28 @@ public class FrameCliente {
 		  
 		  if (username.equals("admin") && password.equals("admin")) {
 		      // Acceso permitido
+			 validacion = true;
 			 return true;
-
+			 
 		  } else {
 		      // Acceso denegado
 		       return false;
 		  }	
 	}	
+	private static JLabel getLblDireccion() {
+		if (lblDireccion == null) {
+			lblDireccion = new JLabel("Direccion:");
+			lblDireccion.setBounds(23, 87, 70, 14);
+		}
+		return lblDireccion;
+	}
+	private static JTextField getTxtFieldDireccion() {
+		if (txtFieldDireccion == null) {
+			txtFieldDireccion = new JTextField();
+			txtFieldDireccion.setColumns(10);
+			txtFieldDireccion.setBounds(118, 84, 125, 20);
+		}
+		return txtFieldDireccion;
+	}
 }
 
